@@ -27,13 +27,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter{
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String jwt=request.getHeader(SecurityConstants.HEADER_STRING);
+		
+  //verifier le token s'il est null ou ne commence pas par "bearer"
 		if(jwt==null || !jwt.startsWith(SecurityConstants.TOKEN_PREFIX)) {
 			filterChain.doFilter(request, response);
 		    return;
 		}
-		System.out.println("****************************");
-		System.out.println(jwt);
-		System.out.println("****************************");
+		
 		Claims claims=Jwts.parser()
 				.setSigningKey(SecurityConstants.SECRET)
 				.parseClaimsJws(jwt.replace(SecurityConstants.TOKEN_PREFIX,""))
